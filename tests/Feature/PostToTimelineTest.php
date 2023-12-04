@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Post;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -28,7 +29,22 @@ class PostToTimelineTest extends TestCase
             ]
         ]);
 
-        $post = \App\Models\Post::first();
-        $response->assertStatus(201);
+        $post = Post::first();
+        $this->assertCount(1, Post::all());
+        $this->assertEquals($user->id, $post->user_id);
+        $this->assertEquals('New Post', $post->body);
+        $response->assertStatus(201)
+            ->assertJson([
+                'data' => [
+                    'type' => 'posts',
+                    'id' => $post->id,
+                    'attributes' => [
+                        'body' => 'New Post'
+                    ]
+                ],
+                'links' => [
+                    'self' => url('/posts/' . $post->id)
+                ]
+            ]);
     }
 }
