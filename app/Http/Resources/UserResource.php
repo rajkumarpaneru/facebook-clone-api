@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use JsonSerializable;
 
-class PostResource extends JsonResource
+class UserResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -19,15 +19,14 @@ class PostResource extends JsonResource
     {
         return [
             'data' => [
-                'type' => 'posts',
+                'type' => 'users',
                 'id' => $this->id,
                 'attributes' => [
-                    'posted_by' => UserResource::make($this->user),
-                    'body' => $this->body,
+                    'name' => $this->name,
                 ]
             ],
             'links' => [
-                'self' => url('/posts/' . $this->id)
+                'self' => url('/users/' . $this->id)
             ]
         ];
     }
